@@ -1,39 +1,41 @@
-name: Deploy .NET Framework 4.8 MVC application to IIS server
+name: Deploy to EC2
 
 on:
   push:
     branches:
-      - master
+      - main # Adjust the branch name as needed
 
 jobs:
   deploy:
-    name: Deploy
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Install .NET Framework 4.8 SDK
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 4.8.x
+    - name: Build .NET application
+      run: |
+        # Add your build commands here
+          dotnet publish -c Release -o ./publish
+        # Make sure your build output is in a folder, like 'publish'
 
-      - name: Restore .NET project
-        run: dotnet restore
+    - name: Upload to EC2
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: Administrator
+        key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        source: ./publish/ # Adjust to your build output folder
+        target: C:\inetpub\wwwroot\testApp # Adjust to your app folder on EC2
 
-      - name: Build .NET project
-        run: dotnet build
+    - name: SSH into EC2 and Restart IIS
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: Administrator
+        key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        script: |
+          Restart-Service W3SVC
 
-      - name: Publish .NET project
-        run: dotnet publish --configuration Release --output ../../artifacts
-
-      - name: Deploy .NET project to IIS server
-        uses: microsoft/windows-deploy-power-shell@v1.3.3
-        with:
-          connectionString: "DeploymentMethod=MSDeploy;ComputerName=${{ secrets.EC2_HOST }};UserName=Administrator;Password=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
-          source: ../../artifacts/output
-          destination: "IIS Web Application Name"
-
-      - name: Verify deployment
-        run: Invoke-WebRequest -Uri "http://${{ secrets.EC2_HOST }}/IIS Web Application Name"
+# Store your EC2 credentials securely in GitHub Secrets
+# EC2_HOST, EC2_USER, and EC2_SSH_KEY should be added as secrets in your repository settings.
