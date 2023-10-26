@@ -15,7 +15,7 @@ jobs:
 
     - name: Build .NET application
       run: |
-        nuget restore # If your project uses NuGet packages
+        C:\runner\nuget.exe restore # If your project uses NuGet packages
         msbuild mvc-app.csproj /p:Configuration=Release /p:Platform="Any CPU" /t:Publish /p:PublishDir=C:\runner\published # Adjust the project path if needed
 
     - name: Upload to EC2
