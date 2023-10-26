@@ -3,7 +3,7 @@ name: Deploy .NET Framework 4.8 MVC application to IIS server
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
