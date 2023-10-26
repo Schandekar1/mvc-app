@@ -1,0 +1,39 @@
+name: Deploy .NET Framework 4.8 MVC application to IIS server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Install .NET Framework 4.8 SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 4.8.x
+
+      - name: Restore .NET project
+        run: dotnet restore
+
+      - name: Build .NET project
+        run: dotnet build
+
+      - name: Publish .NET project
+        run: dotnet publish --configuration Release --output ../../artifacts
+
+      - name: Deploy .NET project to IIS server
+        uses: microsoft/windows-deploy-power-shell@v1.3.3
+        with:
+          connectionString: "DeploymentMethod=MSDeploy;ComputerName=${{ secrets.EC2_HOST }};UserName=Administrator;Password=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+          source: ../../artifacts/output
+          destination: "IIS Web Application Name"
+
+      - name: Verify deployment
+        run: Invoke-WebRequest -Uri "http://${{ secrets.EC2_HOST }}/IIS Web Application Name"
