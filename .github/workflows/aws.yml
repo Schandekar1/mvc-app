@@ -13,6 +13,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Install Visual Studio Build Tools
+      uses: microsoft/setup-msbuild@v1.0.3
+      with:
+        vs-version: 2019
+
     - name: Build .NET application
       run: |
         nuget restore # If your project uses NuGet packages
