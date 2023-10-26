@@ -16,7 +16,7 @@ jobs:
     - name: Build .NET application
       run: |
         C:\runner\nuget.exe restore # If your project uses NuGet packages
-        msbuild mvc-app.csproj /p:Configuration=Release /p:Platform="Any CPU" /t:Publish /p:PublishDir=C:\runner\published # Adjust the project path if needed
+        "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\msbuild.exe" mvc-app.csproj /p:Configuration=Release /p:Platform="Any CPU" /t:Publish /p:PublishDir=C:\runner\published # Adjust the project path if needed
 
     - name: Upload to EC2
       uses: appleboy/scp-action@master
