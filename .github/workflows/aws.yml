@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: "window-test-runner-dotnet-framework"
+    runs-on: self-hosted
 
     steps:
     - name: Checkout code
