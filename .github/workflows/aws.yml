@@ -30,7 +30,15 @@ jobs:
     - name: Build Solution
       run: |
         msbuild.exe mvc-app.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build"
-        
+    
+    - name: Download PuTTY Installer
+      run: |
+        Invoke-WebRequest -Uri 'https://the.earth.li/~sgtatham/putty/latest/w64/putty-64bit-0.79-installer.msi' -OutFile 'putty-installer.msi'
+
+    - name: Install PuTTY
+      run: |
+        msiexec /i putty-installer.msi /qn /norestart
+
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
