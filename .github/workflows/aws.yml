@@ -54,7 +54,7 @@ jobs:
 
     - name: Copy folder to remote machine
       run: |
-        xcopy ./_build \\34.227.94.173\C:\inetpub\wwwroot\testApp /E
+        xcopy "D:\a\mvc-app\mvc-app\_build" "\\34.227.94.173\C:\inetpub\wwwroot\testApp" /E
 
     - name: Disconnect from remote machine
       run: |
