@@ -51,8 +51,8 @@ jobs:
     - name: Copy Build Directory to EC2
       run: |
         # Replace the following placeholders with your actual values:
-        #$localPath = "./_build" 
-        #$remotePath = "C:\inetpub\wwwroot\testApp"
+        $localPath = "./_build" 
+        $remotePath = "C:\inetpub\wwwroot\testApp"
 
         $source = "C:\runner\actions-runner-win-x64-2.311.0\_work\mvc-app\_build"
         $destination = "\\34.227.94.173\C$\inetpub\wwwroot\testApp"
@@ -63,11 +63,11 @@ jobs:
         $robocopyCommand = "robocopy `"$source`" `"$destination`" /e"
 
         # Start a new process to run the Robocopy command using cmd.exe
-        Start-Process -FilePath "cmd.exe" -ArgumentList "/c", $robocopyCommand -Credential (New-Object PSCredential -ArgumentList $username, (ConvertTo-SecureString $password -AsPlainText -Force))
+        #Start-Process -FilePath "cmd.exe" -ArgumentList "/c", $robocopyCommand -Credential (New-Object PSCredential -ArgumentList $username, (ConvertTo-SecureString $password -AsPlainText -Force))
 
         # You can also add -Wait to wait for the process to finish
         # Start-Process -FilePath "cmd.exe" -ArgumentList "/c", $robocopyCommand -Credential (New-Object PSCredential -ArgumentList $username, (ConvertTo-SecureString $password -AsPlainText -Force)) -Wait
 
         # Use Robocopy to copy the directory to the EC2 instance
-        #robocopy $localPath "\\${{ secrets.EC2_HOST }}\$remotePath" /user:${{ secrets.EC2_USERNAME }} /password:${{ secrets.AWS_SECRET_ACCESS_KEY }} /e /z /mt /r:0 /w:0
+        robocopy $localPath "\\${{ secrets.EC2_HOST }}\$remotePath" /user:$username /password:$password /recurse
         
