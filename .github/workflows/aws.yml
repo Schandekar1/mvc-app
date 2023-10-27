@@ -1,8 +1,8 @@
-name: Deploy .NET Framework 4.8 MVC Application
+name: Deploy build
 
 on:
   push:
-    branches:
+    branches: 
       - master
 
 jobs:
@@ -10,19 +10,29 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Install .NET Framework 4.8
-        run: |
-          msiexec /i https://download.microsoft.com/download/F/1/E/F1EE42F6-8282-4633-8D51-4761C318F2E8/NDP48-KB2901907-x86-x64-AllOS-ENU.exe
-      - name: Build application
-        run: msbuild /p:Configuration=Release
+    - uses: actions/checkout@v2
+    
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.2
+      
+    - name: Navigate to Workspace
+      run: cd $GITHUB_WORKSPACE
 
-    steps:
-      - uses: actions/checkout@v3
-      - name: Copy build to EC2 instance
-        run: |
-          aws ssm start-session --target i-0424ccff7cd078964 --document-name AWS-RunShellScript --parameters "commands=['mkdir -p /var/www/html/my-application', 'cp -r artifacts/* /var/www/html/my-application']" --timeout-seconds 300
+    - name: Create Build Directory
+      run: mkdir _build
+      
+    - name: Restore Packages
+      run: nuget restore mvc-app.sln
+
+    - name: Build Solution
+      run: |
+        msbuild.exe mvc-app.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build"
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: MyAppBundle
+        path: "./_build" 
