@@ -36,3 +36,15 @@ jobs:
       with:
         name: MyAppBundle
         path: "./_build" 
+
+    - name: Copy files to AWS EC2 Windows
+      run: |
+        # Replace 'your-ec2-instance-ip' with the actual IP address or DNS of your EC2 Windows instance.
+        # Replace 'YourKeyPair.pem' with the private key file used for connecting to your EC2 Windows instance.
+        # Replace 'C:\path\to\destination' with the path to the destination directory on your EC2 Windows instance.
+
+        # Use PSCP (from PuTTY) to copy the files
+        pscp -i "C:\runner\developer-portal-ec2-key-poc.pem" -r ./_build ec2-user@34.227.94.173:"C:\inetpub\wwwroot\testApp"
+
+        # Use Plink (from PuTTY) to execute commands on the EC2 instance (if needed)
+        # plink -i "YourKeyPair.pem" ec2-user@your-ec2-instance-ip "your-command"
