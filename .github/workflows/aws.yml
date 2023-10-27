@@ -39,4 +39,4 @@ jobs:
 
     - name: Copy files to AWS EC2 Windows
       run: |       
-        pscp -i ${{ secrets.SSH_PRIVATE_KEY }} -r ./_build Administrator@34.227.94.173:"C:\inetpub\wwwroot\testApp"
+        pscp -i ${ secrets.SSH_PRIVATE_KEY } -r ./_build Administrator@34.227.94.173:"C:\inetpub\wwwroot\testApp"
