@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: Deploy .NET Framework 4.8 MVC Application
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  deploy:
+  build:
     runs-on: windows-latest
 
     steps:
@@ -17,20 +17,12 @@ jobs:
       - name: Build application
         run: msbuild /p:Configuration=Release
 
-      - name: Upload to EC2
-        uses: appleboy/scp-action@master
-        with:
-            host: ${{ secrets.EC2_HOST }}
-            username: Administrator
-            key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            source: / # Adjust to your build output folder
-            target: C:\inetpub\wwwroot\testApp # Adjust to your app folder on EC2
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
 
-      - name: SSH into EC2 and Restart IIS
-        uses: appleboy/ssh-action@master
-        with:
-            host: ${{ secrets.EC2_HOST }}
-            username: Administrator
-            key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            script: |
-              iisreset /restart
+    steps:
+      - uses: actions/checkout@v3
+      - name: Copy build to EC2 instance
+        run: |
+          aws ssm start-session --target i-0424ccff7cd078964 --document-name AWS-RunShellScript --parameters "commands=['mkdir -p /var/www/html/my-application', 'cp -r artifacts/* /var/www/html/my-application']" --timeout-seconds 300
