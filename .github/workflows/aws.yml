@@ -60,7 +60,7 @@ jobs:
         $password = "9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof&"
 
         # Build the Robocopy command as a string
-        $robocopyCommand = "robocopy `"$source`" `"$destination`" /e"
+        #$robocopyCommand = "robocopy `"$source`" `"$destination`" /e"
 
         # Start a new process to run the Robocopy command using cmd.exe
         #Start-Process -FilePath "cmd.exe" -ArgumentList "/c", $robocopyCommand -Credential (New-Object PSCredential -ArgumentList $username, (ConvertTo-SecureString $password -AsPlainText -Force))
@@ -71,6 +71,6 @@ jobs:
         # Use Robocopy to copy the directory to the EC2 instance
         #robocopy $localPath "\\${{ secrets.EC2_HOST }}\$remotePath" /user:$username /password:$password /recurse
         net use Z: "\\34.227.94.173\C$" /user:Administrator 9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof&
-        robocopy "C:\runner\actions-runner-win-x64-2.311.0\_work\mvc-app\_build" Z:\inetpub\wwwroot\testApp /mir
+        robocopy "./_build" Z:\inetpub\wwwroot\testApp /mir
         net use Z: /delete
         
