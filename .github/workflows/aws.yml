@@ -10,27 +10,27 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: Install .NET Framework 4.8
+        run: |
+          msiexec /i https://download.microsoft.com/download/F/1/E/F1EE42F6-8282-4633-8D51-4761C318F2E8/NDP48-KB2901907-x86-x64-AllOS-ENU.exe
+      - name: Build application
+        run: msbuild /p:Configuration=Release
 
-    - name: Build .NET application
-      run: |
-       msbuild mvc-app.csproj /p:Configuration=Release /p:Platform="Any CPU" /t:Publish /p:PublishDir=C:\runner\published # Adjust the project path if needed
+      - name: Upload to EC2
+        uses: appleboy/scp-action@master
+        with:
+            host: ${{ secrets.EC2_HOST }}
+            username: Administrator
+            key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            source: / # Adjust to your build output folder
+            target: C:\inetpub\wwwroot\testApp # Adjust to your app folder on EC2
 
-    - name: Upload to EC2
-      uses: appleboy/scp-action@master
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: Administrator
-        key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        source: C:\runner\published # Adjust to your build output folder
-        target: C:\inetpub\wwwroot\testApp # Adjust to your app folder on EC2
-
-    - name: SSH into EC2 and Restart IIS
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: Administrator
-        key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        script: |
-          iisreset /restart
+      - name: SSH into EC2 and Restart IIS
+        uses: appleboy/ssh-action@master
+        with:
+            host: ${{ secrets.EC2_HOST }}
+            username: Administrator
+            key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            script: |
+              iisreset /restart
