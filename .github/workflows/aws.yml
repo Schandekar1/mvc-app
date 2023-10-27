@@ -55,7 +55,7 @@ jobs:
         $remotePath = "C:\inetpub\wwwroot\testApp"
 
         # Use Robocopy to copy the directory to the EC2 instance
-        robocopy $localPath "\\${{ secrets.EC2_HOST }}\$remotePath" /user:${{ secrets.EC2_USERNAME }} /password:${{ secrets.AWS_SECRET_ACCESS_KEY }} /e /z /mt /r:0 /w:0
+        robocopy $localPath "\\${{ secrets.EC2_HOST }}\$remotePath" /user:${{ secrets.EC2_USERNAME }} /password:${{ secrets.AWS_SECRET_ACCESS_KEY }} 
         
     #- name: Copy files to AWS EC2 Windows
     #  run: |       
