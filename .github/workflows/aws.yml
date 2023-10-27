@@ -39,4 +39,4 @@ jobs:
 
     - name: Copy files to AWS EC2 Windows
       run: |       
-        pscp -i "C:\runner\developer-portal-ec2-key-poc.pem" -r ./_build ec2-user@34.227.94.173:"C:\inetpub\wwwroot\testApp"
+        pscp -i "C:\runner\developer-portal-ec2-key-poc.pem" -r ./_build Administrator@34.227.94.173:"C:\inetpub\wwwroot\testApp"
