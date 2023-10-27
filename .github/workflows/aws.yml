@@ -77,6 +77,10 @@ jobs:
         # Define the source directory and files to copy
 
         # Use xcopy to copy files to the remote destination with credentials
-        $xcopyCommand = "xcopy $localPath $destination /E /I /Y /K /H /Z /O /X /V /R /U /S /user:Administrator /password:9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof&"
-        Invoke-Expression -Command $xcopyCommand
+        $xcopyCommand = "xcopy ./_build \\34.227.94.173\C$\inetpub\wwwroot\testApp /E /I /Y /K /H /Z /O /X /V /R /U /S /user:Administrator /password:9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof&"
+        try {
+            Invoke-Expression -Command $xcopyCommand
+            } catch {
+                Write-Host "Error: $_"
+            }
         
