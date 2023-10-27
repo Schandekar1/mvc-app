@@ -70,7 +70,13 @@ jobs:
 
         # Use Robocopy to copy the directory to the EC2 instance
         #robocopy $localPath "\\${{ secrets.EC2_HOST }}\$remotePath" /user:$username /password:$password /recurse
-        net use Z: "\\34.227.94.173\C$" /user:Administrator 9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof&
-        robocopy "./_build" Z:\inetpub\wwwroot\testApp /mir
-        net use Z: /delete
+        #net use Z: "\\34.227.94.173\C$" /user:Administrator 9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof&
+        #robocopy "./_build" Z:\inetpub\wwwroot\testApp /mir
+        #net use Z: /delete
+
+        # Define the source directory and files to copy
+
+        # Use xcopy to copy files to the remote destination with credentials
+        $xcopyCommand = "xcopy $localPath $destination /E /I /Y /K /H /Z /O /X /V /R /U /S /user:Administrator /password:9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof&"
+        Invoke-Expression -Command $xcopyCommand
         
