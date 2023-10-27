@@ -10,6 +10,9 @@ jobs:
     runs-on: self-hosted
     env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+        EC2_INSTANCE_IP: ${{ secrets.EC2_HOST }}
+        EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
+        EC2_PASSWORD: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
     steps:
     - uses: actions/checkout@v2
@@ -53,12 +56,7 @@ jobs:
 
         # Use Robocopy to copy the directory to the EC2 instance
         robocopy $localPath "\\EC2_INSTANCE_IP\$remotePath" /e /z /mt /r:0 /w:0
-
-      env:
-        EC2_INSTANCE_IP: ${{ secrets.EC2_HOST }}
-        EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
-        EC2_PASSWORD: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
+        
     #- name: Copy files to AWS EC2 Windows
     #  run: |       
     #    pscp -i "C:\runner\developer-portal-ec2-key-poc.pem" -r ./_build Administrator@34.227.94.173:"C:\inetpub\wwwroot\testApp"
