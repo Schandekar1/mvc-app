@@ -48,16 +48,28 @@ jobs:
         name: MyAppBundle
         path: "./_build" 
 
-    - name: Copy Build Directory to EC2
+    - name: Connect to remote machine
       run: |
-        # Replace the following placeholders with your actual values:
-        $localPath = "./_build" 
-        $remotePath = "C:\inetpub\wwwroot\testApp"
+        net use \\34.227.94.173\IPC$ /user:Administrator 9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof&
 
-        $source = "C:\runner\actions-runner-win-x64-2.311.0\_work\mvc-app\_build"
-        $destination = "\\34.227.94.173\C:\inetpub\wwwroot\testApp"
-        $username = "Administrator"
-        $password = "9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof&"
+    - name: Copy folder to remote machine
+      run: |
+        xcopy ./_build \\34.227.94.173\C:\inetpub\wwwroot\testApp /E
+
+    - name: Disconnect from remote machine
+      run: |
+        net use \\34.227.94.173\IPC$ /delete
+
+    #- name: Copy Build Directory to EC2
+      #run: |
+        # Replace the following placeholders with your actual values:
+        #$localPath = "./_build" 
+        #$remotePath = "C:\inetpub\wwwroot\testApp"
+
+        #$source = "C:\runner\actions-runner-win-x64-2.311.0\_work\mvc-app\_build"
+        #$destination = "\\34.227.94.173\C:\inetpub\wwwroot\testApp"
+        #$username = "Administrator"
+        #$password = "9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof&"
 
         # Build the Robocopy command as a string
         #$robocopyCommand = "robocopy `"$source`" `"$destination`" /e"
@@ -77,9 +89,11 @@ jobs:
         # Define the source directory and files to copy
 
         # Use xcopy to copy files to the remote destination with credentials
-        net use \34.227.94.173\IPC$ /user:Administrator 9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof& && xcopy $localPath \34.227.94.173\C:\inetpub\wwwroot\testApp /E
-        $xcopyCommand = "xcopy $localPath $destination /E /I /Y /K /H /Z /O /X /V /R /U /S /user:Administrator /password:9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof&"
-        Invoke-Expression -Command $xcopyCommand
+        #net use \34.227.94.173\IPC$ /user:Administrator 9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof& && xcopy $localPath \34.227.94.173\C:\inetpub\wwwroot\testApp /E
+        #$xcopyCommand = "xcopy $localPath $destination /E /I /Y /K /H /Z /O /X /V /R /U /S /user:Administrator /password:9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof&"
+        #Invoke-Expression -Command $xcopyCommand
+
+
 
         
         
