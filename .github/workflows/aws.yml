@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: self-hosted
     env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
@@ -31,13 +31,13 @@ jobs:
       run: |
         msbuild.exe mvc-app.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build"
     
-    - name: Download PuTTY Installer
-      run: |
-        Invoke-WebRequest -Uri 'https://the.earth.li/~sgtatham/putty/latest/w64/putty-64bit-0.79-installer.msi' -OutFile 'putty-installer.msi'
+    #- name: Download PuTTY Installer
+    #  run: |
+    #    Invoke-WebRequest -Uri 'https://the.earth.li/~sgtatham/putty/latest/w64/putty-64bit-0.79-installer.msi' -OutFile 'putty-installer.msi'
 
-    - name: Install PuTTY
-      run: |
-        msiexec /i putty-installer.msi /qn /norestart
+    #- name: Install PuTTY
+    #  run: |
+    #    msiexec /i putty-installer.msi /qn /norestart
 
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
@@ -45,6 +45,20 @@ jobs:
         name: MyAppBundle
         path: "./_build" 
 
-    - name: Copy files to AWS EC2 Windows
-      run: |       
-        pscp -i ${ secrets.SSH_PRIVATE_KEY } -r ./_build Administrator@34.227.94.173:"C:\inetpub\wwwroot\testApp"
+    - name: Copy Build Directory to EC2
+      run: |
+        # Replace the following placeholders with your actual values:
+        $localPath = "./_build" 
+        $remotePath = "C:\inetpub\wwwroot\testApp"
+
+        # Use Robocopy to copy the directory to the EC2 instance
+        robocopy $localPath "\\EC2_INSTANCE_IP\$remotePath" /e /z /mt /r:0 /w:0
+
+      env:
+        EC2_INSTANCE_IP: ${{ secrets.EC2_HOST }}
+        EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
+        EC2_PASSWORD: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    #- name: Copy files to AWS EC2 Windows
+    #  run: |       
+    #    pscp -i "C:\runner\developer-portal-ec2-key-poc.pem" -r ./_build Administrator@34.227.94.173:"C:\inetpub\wwwroot\testApp"
