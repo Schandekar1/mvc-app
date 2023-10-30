@@ -33,14 +33,6 @@ jobs:
     - name: Build Solution
       run: |
         msbuild.exe mvc-app.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build"
-    
-    #- name: Download PuTTY Installer
-    #  run: |
-    #    Invoke-WebRequest -Uri 'https://the.earth.li/~sgtatham/putty/latest/w64/putty-64bit-0.79-installer.msi' -OutFile 'putty-installer.msi'
-
-    #- name: Install PuTTY
-    #  run: |
-    #    msiexec /i putty-installer.msi /qn /norestart
 
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
@@ -50,15 +42,15 @@ jobs:
 
     - name: Connect to remote machine
       run: |
-        net use \\34.227.94.173\IPC$ /user:Administrator 9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof&
+        net use \\ec2-54-160-125-179.compute-1.amazonaws.com\IPC$ /user:Administrator 9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof&
 
     - name: Copy folder to remote machine
       run: |
-        xcopy "_build" "\\34.227.94.173\C$\inetpub\wwwroot\testApp" /E
+        xcopy "_build" "\\ec2-54-160-125-179.compute-1.amazonaws.com\C$\inetpub\wwwroot\testApp" /E
 
     - name: Disconnect from remote machine
       run: |
-        net use \\34.227.94.173\IPC$ /delete
+        net use \\ec2-54-160-125-179.compute-1.amazonaws.com\IPC$ /delete
 
     #- name: Copy Build Directory to EC2
       #run: |
