@@ -42,15 +42,15 @@ jobs:
 
     - name: Connect to remote machine
       run: |
-        net use \\ec2-54-160-125-179.compute-1.amazonaws.com\IPC$ /user:Administrator 9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof&
+        net use X: \\ec2-54-160-125-179.compute-1.amazonaws.com\C$ /user:Administrator 9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof&
 
     - name: Copy folder to remote machine
       run: |
-        xcopy "_build" "\\ec2-54-160-125-179.compute-1.amazonaws.com\C$\inetpub\wwwroot\testApp" /E
+        xcopy "_build" X:\inetpub\wwwroot\testApp /E
 
     - name: Disconnect from remote machine
       run: |
-        net use \\ec2-54-160-125-179.compute-1.amazonaws.com\IPC$ /delete
+        net use X: /delete
 
     #- name: Copy Build Directory to EC2
       #run: |
