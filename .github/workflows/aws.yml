@@ -40,23 +40,23 @@ jobs:
         name: MyAppBundle
         path: "./_build" 
 
-    - name: Connect to remote machine
-      run: |
-        net use X: \\ec2-54-160-125-179.compute-1.amazonaws.com\C$ /user:Administrator 9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof&
+    #- name: Connect to remote machine
+    #  run: |
+    #    net use X: \\ec2-54-160-125-179.compute-1.amazonaws.com\C$ /user:Administrator 9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof&
 
-    - name: Copy folder to remote machine
-      run: |
-        xcopy "_build" X:\inetpub\wwwroot\testApp /E
+    #- name: Copy folder to remote machine
+    #  run: |
+    #    xcopy "_build" X:\inetpub\wwwroot\testApp /E
 
-    - name: Disconnect from remote machine
-      run: |
-        net use X: /delete
+    #- name: Disconnect from remote machine
+    #  run: |
+    #    net use X: /delete
 
-    #- name: Copy Build Directory to EC2
-      #run: |
+    - name: Copy Build Directory to EC2
+      run: |
         # Replace the following placeholders with your actual values:
-        #$localPath = "./_build" 
-        #$remotePath = "C:\inetpub\wwwroot\testApp"
+        $localPath = "./_build" 
+        $remotePath = "C:\inetpub\wwwroot\testApp"
 
         #$source = "C:\runner\actions-runner-win-x64-2.311.0\_work\mvc-app\_build"
         #$destination = "\\34.227.94.173\C:\inetpub\wwwroot\testApp"
@@ -73,10 +73,10 @@ jobs:
         # Start-Process -FilePath "cmd.exe" -ArgumentList "/c", $robocopyCommand -Credential (New-Object PSCredential -ArgumentList $username, (ConvertTo-SecureString $password -AsPlainText -Force)) -Wait
 
         # Use Robocopy to copy the directory to the EC2 instance
-        #robocopy $localPath "\\${{ secrets.EC2_HOST }}\$remotePath" /user:$username /password:$password /recurse
-        #net use Z: "\\34.227.94.173\C$" /user:Administrator 9aB6=Jz5=ZhnBY3UnP.yc4gQCEhgOof&
-        #robocopy "./_build" Z:\inetpub\wwwroot\testApp /mir
-        #net use Z: /delete
+        robocopy $localpath \\ec2-54-160-125-179.compute-1.amazonaws.com\$remotepath /user:administrator /password:9ab6=jz5=zhnby3unp.yc4gqcehgoof& /recurse
+        net use z: "\\34.227.94.173\c$" /user:administrator 9ab6=jz5=zhnby3unp.yc4gqcehgoof&
+        robocopy "./_build" z:\inetpub\wwwroot\testapp /mir
+        net use z: /delete
 
         # Define the source directory and files to copy
 
