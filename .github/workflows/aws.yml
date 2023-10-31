@@ -57,7 +57,7 @@ jobs:
         # Replace the following placeholders with your actual values:
         $localPath = "./_build" 
         $remotePath = "C:\runner\published"
-        xcopy $localPath $remotePath /E /H
+        robocopy $localPath $remotePath /mir
 
         #$source = "C:\runner\actions-runner-win-x64-2.311.0\_work\mvc-app\_build"
         #$destination = "\\34.227.94.173\C:\inetpub\wwwroot\testApp"
