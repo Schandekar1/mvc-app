@@ -55,7 +55,7 @@ jobs:
     - name: Copy Build Directory to EC2
       run: |
         # Replace the following placeholders with your actual values:
-        xcopy "_build" "C:\runner\published" /E /H /Y
+        xcopy "./_build" "C:\runner\published" /E /H /Y
 
         #$source = "C:\runner\actions-runner-win-x64-2.311.0\_work\mvc-app\_build"
         #$destination = "\\34.227.94.173\C:\inetpub\wwwroot\testApp"
