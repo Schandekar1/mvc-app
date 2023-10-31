@@ -56,7 +56,8 @@ jobs:
       run: |
         # Replace the following placeholders with your actual values:
         $localPath = "./_build" 
-        $remotePath = "C:\inetpub\wwwroot\testApp"
+        $remotePath = "C:\runner\published"
+        xcopy $localPath $remotePath /E /H
 
         #$source = "C:\runner\actions-runner-win-x64-2.311.0\_work\mvc-app\_build"
         #$destination = "\\34.227.94.173\C:\inetpub\wwwroot\testApp"
@@ -73,7 +74,7 @@ jobs:
         # Start-Process -FilePath "cmd.exe" -ArgumentList "/c", $robocopyCommand -Credential (New-Object PSCredential -ArgumentList $username, (ConvertTo-SecureString $password -AsPlainText -Force)) -Wait
 
         # Use Robocopy to copy the directory to the EC2 instance
-        robocopy $localpath \\ec2-54-160-125-179.compute-1.amazonaws.com\$remotepath /user:administrator /password:9ab6=jz5=zhnby3unp.yc4gqcehgoof& 
+        #robocopy $localpath \\ec2-54-160-125-179.compute-1.amazonaws.com\$remotepath /user:administrator /password:9ab6=jz5=zhnby3unp.yc4gqcehgoof& 
         #net use z: \\ec2-54-160-125-179.compute-1.amazonaws.com\c$ /user:administrator 9ab6=jz5=zhnby3unp.yc4gqcehgoof&
         #robocopy "./_build" z:\inetpub\wwwroot\testapp /mir
         #net use z: /delete
