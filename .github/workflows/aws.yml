@@ -55,9 +55,9 @@ jobs:
     - name: Copy Build Directory to EC2
       run: |
         # Replace the following placeholders with your actual values:
-        $localPath = "./_build" 
+        $localPath = "_build" 
         $remotePath = "C:\runner\published"
-        robocopy $localPath $remotePath /mir
+        xcopy $localPath $remotePath /E /H
 
         #$source = "C:\runner\actions-runner-win-x64-2.311.0\_work\mvc-app\_build"
         #$destination = "\\34.227.94.173\C:\inetpub\wwwroot\testApp"
