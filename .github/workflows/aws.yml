@@ -45,7 +45,8 @@ jobs:
         # Replace the following placeholders with your actual values:
         xcopy "C:\runner\actions-runner-win-x64-2.311.0\_work\mvc-app\_build" "C:\runner\published" /E /H /Y
 
-
-
+    - name: Restart IIS
+      run: |
+          iisreset /restart
         
         
