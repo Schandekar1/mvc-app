@@ -31,15 +31,13 @@ jobs:
 
     - name: Build Solution
       run: |
-        MSBuild.exe mvc-app.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="./../_build"
-        #Start-Process -FilePath $env:MSBUILD_PATH -ArgumentList "mvc-app.sln", "/nologo", "/nr:false", "/p:DeployOnBuild=true", "/p:DeployDefaultTarget=WebPublish", "/p:WebPublishMethod=FileSystem", "/p:DeleteExistingFiles=True", "/p:platform='Any CPU'", "/p:configuration='Release'", "/p:PublishUrl='./../_build'" -NoNewWindow -Wait
-        #Start-Process $env:MSBUILD_PATH  mvc-app.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="./../_build"
-
-    #- name: Upload artifact
-    #  uses: actions/upload-artifact@v1.0.0
-    #  with:
-    #    name: MyAppBundle
-    #    path: "./_build" 
+        MSBuild.exe mvc-app.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build"
+       
+        #- name: Upload artifact
+        #  uses: actions/upload-artifact@v1.0.0
+        #  with:
+        #    name: MyAppBundle
+        #    path: "./_build" 
 
     - name: Create Published directory and take backup
       run: |
@@ -60,7 +58,7 @@ jobs:
       run: |
         # Replace the following placeholders with your actual values:
         #xcopy "C:\runner\actions-runner-win-x64-2.311.0\_work\mvc-app\_build" "C:\runner\published" /E /H /Y
-        xcopy "_build" "C:\runner\published" /E /H /Y
+        xcopy "\_build" "C:\runner\published" /E /H /Y
 
     - name: Restart IIS
       run: |
