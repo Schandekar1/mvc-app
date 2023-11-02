@@ -49,13 +49,15 @@ jobs:
 
     - name: Copy Build Directory published directory
       run: |
-        xcopy ".\_build" "C:\runner\published" /E /H /Y /D /I
+        #xcopy ".\_build" "C:\runner\published" /E /H /Y /D /I
+        robocopy ".\_build" "C:\runner\published" /MIR
 
     #- name: Install RunAs module for running IIS reset 
     #  run: Install-Module RunAs
 
     - name: Restart IIS
       run: |
-       pwsh -Command "Import-Module RunAs; RunAs -Account 'Administrator' -Command 'iisreset /restart'"
+       powershell -Command "Import-Module RunAs; RunAs -Account 'Administrator' -Command 'iisreset /restart'"
+
         
         
