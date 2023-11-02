@@ -62,6 +62,6 @@ jobs:
 
     - name: Restart IIS
       run: |
-          runas /user:ADMIN_USERNAME "iisreset /restart"
+          Restart-Service -Name "W3SVC" -Force
         
         
