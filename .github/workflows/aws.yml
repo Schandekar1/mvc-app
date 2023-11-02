@@ -58,6 +58,6 @@ jobs:
       run: |
         Import-Module RunAs
 
-        RunAs -Account "ADMIN_USERNAME" -Command "iisreset /restart"
+        RunAs -Account "Administrator" -Command "iisreset /restart"
         
         
