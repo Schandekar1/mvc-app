@@ -47,10 +47,21 @@ jobs:
         }
 
 
-    - name: Copy Build Directory published directory
+    - name: Clear C:\runner\published
       run: |
-        Remove-Item -Path "C:\runner\published\*" -Force -Recurse
-        xcopy ".\_build" "C:\runner\published" /E /H /Y /D /I
+        rmdir /s /q C:\runner\published
+      shell: cmd
+
+    - name: Copy from .\_build to C:\runner\published
+      run: |
+        xcopy .\_build C:\runner\published /E /H /Y
+      shell: cmd
+
+
+    #- name: Copy Build Directory published directory
+      #run: |
+        #Remove-Item -Path "C:\runner\published\*" -Force -Recurse
+        #xcopy ".\_build" "C:\runner\published" /E /H /Y /D /I
         #robocopy "C:\runner\_work\mvc-app\mvc-app\_build\" "C:\runner\published\" /MIR
         #Copy-Item -Path "C:\runner\_work\mvc-app\mvc-app\_build\*" -Destination "C:\runner\published" -Recurse -Force
 
