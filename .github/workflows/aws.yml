@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ec2-windows-dotnet-framework-runner
+    runs-on: self-hosted
     env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
         LABEL: ec2-self-hosted-runner
