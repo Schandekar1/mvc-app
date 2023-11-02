@@ -51,12 +51,13 @@ jobs:
       run: |
         xcopy ".\_build" "C:\runner\published" /E /H /Y
 
-    - name: Run IIS Reset
-      env:
-        ADMIN_USERNAME: Administrator
-        ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+    - name: Install RunAs module for running IIS reset 
+      run: pwsh -Command "Install-Module RunAs"
+
+    - name: Restart IIS
       run: |
-        echo Running IIS Reset
-        echo %ADMIN_PASSWORD% | runas /user:%ADMIN_USERNAME% "iisreset /restart"
+        Import-Module RunAs
+
+        RunAs -Account "ADMIN_USERNAME" -Command "iisreset /restart"
         
         
