@@ -52,7 +52,7 @@ jobs:
         xcopy ".\_build" "C:\runner\published" /E /H /Y
 
     - name: Install RunAs module for running IIS reset 
-      run: pwsh -Command "Install-Module RunAs"
+      run: Install-Module RunAs
 
     - name: Restart IIS
       run: |
