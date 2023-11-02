@@ -43,24 +43,18 @@ jobs:
 
     - name: Create Published directory and take backup
       run: |
-        if not exist C:\runner\published (
-          echo Directory does not exist
-          mkdir C:\runner\published
-        ) else (
-           echo Directory already exists
-          :: Backup the directory contents to a new directory with the current date and time
-          setlocal enabledelayedexpansion
-          for /f "tokens=1-9 delims=/:. " %%a in ('echo !DATE! !TIME!') do (
-            set "YY=%%c"
-            set "MM=%%b"
-            set "DD=%%a"
-            set "HH=%%d"
-            set "NN=%%e"
-            set "SS=%%f"
-          )
-          mkdir "C:\runner\backup\!YY!!MM!!DD!!HH!!NN!!SS!"
-          xcopy /s /e /q C:\runner\published "C:\runner\backup\!YY!!MM!!DD!!HH!!NN!!SS!"
-        )
+        if (-not (Test-Path -Path "C:\runner\published")) {
+            Write-Host "Directory does not exist"
+            New-Item -Path "C:\runner\published" -ItemType Directory
+        } else {
+            Write-Host "Directory already exists"
+            # Backup the directory contents to a new directory with the current date and time
+            $currentDateTime = Get-Date -Format "yyyyMMddHHmmss"
+            $backupDirectory = "C:\runner\backup\$currentDateTime"
+            New-Item -Path $backupDirectory -ItemType Directory
+            Copy-Item -Path "C:\runner\published\*" -Destination $backupDirectory -Recurse
+        }
+
 
     - name: Copy Build Directory published directory
       run: |
