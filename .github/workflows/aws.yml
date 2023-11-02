@@ -54,7 +54,7 @@ jobs:
 
     - name: Copy from .\_build to C:\runner\published
       run: |
-        xcopy ".\_build" "C:\runner\published" /E /H /Y
+        xcopy ".\_build" "C:\runner\published" /E /H /Y /D
       shell: cmd
 
 
