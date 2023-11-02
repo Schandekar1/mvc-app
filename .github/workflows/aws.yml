@@ -7,12 +7,9 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ec2-windows-dotnet-framework-runner
     env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-        EC2_INSTANCE_IP: ${{ secrets.EC2_HOST }}
-        EC2_USERNAME: ${{ secrets.EC2_USERNAME }}
-        EC2_PASSWORD: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
     steps:
     - uses: actions/checkout@v2
@@ -32,18 +29,40 @@ jobs:
 
     - name: Build Solution
       run: |
-        msbuild.exe mvc-app.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="../_build"
+        msbuild.exe mvc-app.sln /nologo /nr:false /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:PublishUrl="./../_build"
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        name: MyAppBundle
-        path: "./_build" 
+    #- name: Upload artifact
+    #  uses: actions/upload-artifact@v1.0.0
+    #  with:
+    #    name: MyAppBundle
+    #    path: "./_build" 
 
-    - name: Copy Build Directory to EC2
+    - name: Create Published directory and take backup
+      run: |
+        if not exist C:\runner\published (
+          echo Directory does not exist
+          mkdir C:\runner\published
+        ) else (
+           echo Directory already exists
+          :: Backup the directory contents to a new directory with the current date and time
+          setlocal enabledelayedexpansion
+          for /f "tokens=1-9 delims=/:. " %%a in ('echo !DATE! !TIME!') do (
+            set "YY=%%c"
+            set "MM=%%b"
+            set "DD=%%a"
+            set "HH=%%d"
+            set "NN=%%e"
+            set "SS=%%f"
+          )
+          mkdir "C:\runner\backup\!YY!!MM!!DD!!HH!!NN!!SS!"
+          xcopy /s /e /q C:\runner\published "C:\runner\backup\!YY!!MM!!DD!!HH!!NN!!SS!"
+        )
+
+    - name: Copy Build Directory published directory
       run: |
         # Replace the following placeholders with your actual values:
-        xcopy "C:\runner\actions-runner-win-x64-2.311.0\_work\mvc-app\_build" "C:\runner\published" /E /H /Y
+        #xcopy "C:\runner\actions-runner-win-x64-2.311.0\_work\mvc-app\_build" "C:\runner\published" /E /H /Y
+        xcopy "_build" "C:\runner\published" /E /H /Y
 
     - name: Restart IIS
       run: |
