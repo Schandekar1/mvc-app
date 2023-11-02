@@ -51,7 +51,7 @@ jobs:
       run: |
         #xcopy ".\_build" "C:\runner\published" /E /H /Y /D /I
         #robocopy "C:\runner\_work\mvc-app\mvc-app\_build\" "C:\runner\published\" /MIR
-        Copy-Item -Path ".\_build\*" -Destination "C:\runner\published" -Recurse -Force
+        Copy-Item -Path "C:\runner\_work\mvc-app\mvc-app\_build\*" -Destination "C:\runner\published" -Recurse -Force
 
     #- name: Install RunAs module for running IIS reset 
     #  run: Install-Module RunAs
