@@ -50,7 +50,7 @@ jobs:
     - name: Copy Build Directory published directory
       run: |
         #xcopy ".\_build" "C:\runner\published" /E /H /Y /D /I
-        robocopy ".\_build" "C:\runner\published" /MIR /L
+        robocopy "C:\runner\_work\mvc-app\mvc-app\_build\" "C:\runner\published\" /MIR
 
     #- name: Install RunAs module for running IIS reset 
     #  run: Install-Module RunAs
