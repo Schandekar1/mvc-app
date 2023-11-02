@@ -10,6 +10,7 @@ jobs:
     runs-on: ec2-windows-dotnet-framework-runner
     env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+        LABEL: ec2-self-hosted-runner
 
     steps:
     - uses: actions/checkout@v2
