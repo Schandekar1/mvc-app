@@ -49,7 +49,7 @@ jobs:
 
     - name: Copy Build Directory published directory
       run: |
-        rmdir /s /q "C:\runner\published"
+        Remove-Item -Path "C:\runner\published\*" -Force -Recurse
         xcopy ".\_build" "C:\runner\published" /E /H /Y /D /I
         #robocopy "C:\runner\_work\mvc-app\mvc-app\_build\" "C:\runner\published\" /MIR
         #Copy-Item -Path "C:\runner\_work\mvc-app\mvc-app\_build\*" -Destination "C:\runner\published" -Recurse -Force
