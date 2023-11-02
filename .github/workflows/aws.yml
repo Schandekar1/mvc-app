@@ -62,6 +62,6 @@ jobs:
 
     - name: Restart IIS
       run: |
-          iisreset /restart
+          runas /user:ADMIN_USERNAME "iisreset /restart"
         
         
