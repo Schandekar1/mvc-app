@@ -56,7 +56,7 @@ jobs:
 
     - name: Restart IIS
       run: |
-        Import-Module RunAs
+        pwsh -Command "Import-Module RunAs;
 
         RunAs -Account "Administrator" -Command "iisreset /restart"
         
