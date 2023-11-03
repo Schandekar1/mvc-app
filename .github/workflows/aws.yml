@@ -47,14 +47,9 @@ jobs:
         }
 
 
-    - name: Clear C:\runner\published
-      run: |
-        rmdir /s /q C:\runner\published
-      shell: cmd
-
     - name: Copy from .\_build to C:\runner\published
       run: |
-        xcopy ".\_build" "C:\runner\published" /E /H /Y /D
+        xcopy ".\_build" "C:\runner\published" /S /E /H /Y /D /Z /I
       shell: cmd
 
 
