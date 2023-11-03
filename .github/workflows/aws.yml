@@ -26,6 +26,8 @@ jobs:
       
     - name: Restore Packages
       run: nuget restore mvc-app.sln
+      env:
+        NUGET_SOURCES: https://api.nuget.org/v3/index.json
 
     - name: Build Solution
       run: |
