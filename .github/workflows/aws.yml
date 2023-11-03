@@ -1,4 +1,4 @@
-name: Deploy build
+name: Deploy Prod build
 
 on:
   push:
@@ -7,10 +7,9 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: [self-hosted, ec2-self-hosted-runner]
     env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-        LABEL: ec2-self-hosted-runner
 
     steps:
     - uses: actions/checkout@v2
