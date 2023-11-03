@@ -3,11 +3,11 @@ name: Deploy build
 on:
   push:
     branches: 
-      - master
+      - Dev
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: [self-hosted, local-runner]
     env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
         LABEL: ec2-self-hosted-runner
