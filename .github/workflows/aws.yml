@@ -17,10 +17,12 @@ jobs:
     - name: Set Environment Variable
       run: echo "BRANCH_NAME=${GITHUB_REF/refs\/heads\//}" >> $GITHUB_ENV
 
+    - name: Display Branch Name
+      run: echo "The branch name is ${{ steps.branch.outputs.branch }}"
+
     - name: Execute Token Replacement Script
       run: |
           $branchName = $env:BRANCH_NAME
-          Write-Host $branchName
           # Specify the paths to your web.config and tokenization file
           $webConfigPath = "web.config"
           if ($branchName -eq "master") {
@@ -47,7 +49,7 @@ jobs:
           # Save the modified content back to the web.config file
           $webConfigContent | Set-Content $webConfigPath -Force
 
-          Write-Host "Tokens replaced in web.config."
+          Write-Host "Tokens replaced in web.config.  $branchName"
 
     
     - name: Setup MSBuild
