@@ -56,7 +56,8 @@ jobs:
 
     - name: Restart IIS
       run: |
-       powershell -Command "Import-Module RunAs; RunAs -Account 'Administrator' -Command 'iisreset /restart'"
+       #powershell -Command "Import-Module RunAs; RunAs -Account 'Administrator' -Command 'iisreset /restart'"
+       iisreset /restart
 
         
         
