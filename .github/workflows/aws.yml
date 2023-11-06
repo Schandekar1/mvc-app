@@ -20,6 +20,7 @@ jobs:
     - name: Execute Token Replacement Script
       run: |
           $branchName = $env:BRANCH_NAME
+          Write-Host $branchName
           # Specify the paths to your web.config and tokenization file
           $webConfigPath = "web.config"
           if ($branchName -eq "master") {
