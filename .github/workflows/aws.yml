@@ -14,36 +14,39 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    #- name: Set up PowerShell
-    #  uses: actions/setup-powershell@v2
-    #  with:
-    #    powershell-version: '7.x' # Use the version you prefer
+    - name: Set Environment Variable
+      run: echo "BRANCH_NAME=${GITHUB_REF/refs\/heads\//}" >> $GITHUB_ENV
 
     - name: Execute Token Replacement Script
       run: |
+          $branchName = $env:BRANCH_NAME
           # Specify the paths to your web.config and tokenization file
-            $webConfigPath = "web.config"
+          $webConfigPath = "web.config"
+          if ($branchName -eq "master") {
             $tokenizationFilePath = "configuration\appSettings.Production.json"
+          } else {
+            $tokenizationFilePath = "configuration\appSettings.Development.json"
+          }
 
-            # Read the tokenization file (e.g., appSettings.Production.json)
-            $tokenizationData = Get-Content $tokenizationFilePath | ConvertFrom-Json
+          # Read the tokenization file (e.g., appSettings.Production.json)
+          $tokenizationData = Get-Content $tokenizationFilePath | ConvertFrom-Json
 
-            # Load the content of the web.config file
-            $webConfigContent = Get-Content $webConfigPath
+          # Load the content of the web.config file
+          $webConfigContent = Get-Content $webConfigPath
 
-            # Iterate through each key-value pair in the tokenization data and replace tokens in the web.config
-            foreach ($key in $tokenizationData.PSObject.Properties.Name) {
-                $token = $key
-                $value = $tokenizationData.$key
+          # Iterate through each key-value pair in the tokenization data and replace tokens in the web.config
+          foreach ($key in $tokenizationData.PSObject.Properties.Name) {
+              $token = $key
+              $value = $tokenizationData.$key
 
-                # Replace the token with the corresponding value in the web.config content
-                $webConfigContent = $webConfigContent -replace [regex]::Escape($token), $value
-            }
+              # Replace the token with the corresponding value in the web.config content
+              $webConfigContent = $webConfigContent -replace [regex]::Escape($token), $value
+          }
 
-            # Save the modified content back to the web.config file
-            $webConfigContent | Set-Content $webConfigPath -Force
+          # Save the modified content back to the web.config file
+          $webConfigContent | Set-Content $webConfigPath -Force
 
-            Write-Host "Tokens replaced in web.config."
+          Write-Host "Tokens replaced in web.config."
 
     
     - name: Setup MSBuild
