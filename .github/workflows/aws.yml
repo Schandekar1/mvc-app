@@ -22,7 +22,7 @@ jobs:
 
     - name: Execute Token Replacement Script
       run: |
-          $branchName = $env:BRANCH_NAME
+          $branchName = git rev-parse --abbrev-ref HEAD
           # Specify the paths to your web.config and tokenization file
           $webConfigPath = "web.config"
           if ($branchName -eq "master") {
