@@ -22,14 +22,11 @@ jobs:
 
     - name: Execute Token Replacement Script
       run: |
-          # Read the content of the .git/HEAD file to get branch name
-          $headFileContent = Get-Content .git/HEAD -Raw
+          $githubRef = $env:GITHUB_REF
+          $branchName = ($githubRef -split '/')[-1]
 
-          # Extract the branch name from the content
-          if ($headFileContent -match 'ref: refs/heads/(.+)') {
-              $branchName = $matches[1]
-              Write-Host "Current branch: $branchName"
-          }
+          Write-Host "Current branch: $branchName"
+
           # Specify the paths to your web.config and tokenization file
           $webConfigPath = "web.config"
           if ($branchName -eq "master") {
