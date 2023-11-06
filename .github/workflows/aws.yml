@@ -14,12 +14,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    #- name: Set Environment Variable
-    #  run: echo "BRANCH_NAME=${GITHUB_REF/refs\/heads\//}" >> $GITHUB_ENV
-
-    #- name: Display Branch Name
-    #  run: echo "The branch name is ${{ steps.branch.outputs.branch }}"
-
     - name: Execute Token Replacement Script
       run: |
           $githubRef = $env:GITHUB_REF
