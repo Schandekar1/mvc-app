@@ -1,18 +1,56 @@
-name: Deploy Prod build
+
+name: Deploy Dev build
+
 
 on:
   push:
     branches: 
-      - master
+      - Dev
 
 jobs:
   build:
-    runs-on: [self-hosted, ec2-self-hosted-runner]
+    runs-on: [self-hosted, local-runner]
     env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Execute Token Replacement Script
+      run: |
+          $githubRef = $env:GITHUB_REF
+          $branchName = ($githubRef -split '/')[-1]
+
+          Write-Host "Current branch: $branchName"
+
+          # Specify the paths to your web.config and tokenization file
+          $webConfigPath = "web.config"
+          if ($branchName -eq "master") {
+            $tokenizationFilePath = "configuration\appSettings.Production.json"
+          } else {
+            $tokenizationFilePath = "configuration\appSettings.Development.json"
+          }
+
+          # Read the tokenization file (e.g., appSettings.Production.json)
+          $tokenizationData = Get-Content $tokenizationFilePath | ConvertFrom-Json
+
+          # Load the content of the web.config file
+          $webConfigContent = Get-Content $webConfigPath
+
+          # Iterate through each key-value pair in the tokenization data and replace tokens in the web.config
+          foreach ($key in $tokenizationData.PSObject.Properties.Name) {
+              $token = $key
+              $value = $tokenizationData.$key
+
+              # Replace the token with the corresponding value in the web.config content
+              $webConfigContent = $webConfigContent -replace [regex]::Escape($token), $value
+          }
+
+          # Save the modified content back to the web.config file
+          $webConfigContent | Set-Content $webConfigPath -Force
+
+          Write-Host "Tokens replaced in web.config.  $branchName"
+
     
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v1
@@ -48,7 +86,7 @@ jobs:
 
     - name: Copy Build Directory published directory
       run: |
-        xcopy "C:\runner\_work\mvc-app\_build" "C:\runner\published" /S /E /H /Y /D /Z /I
+        xcopy "C:\runner\actions-runner-win-x64-2.311.0\_work\mvc-app\_build" "C:\runner\published" /S /E /H /Y /D /Z /I
       shell: cmd
 
     #- name: Install RunAs module for running IIS reset 
@@ -56,7 +94,7 @@ jobs:
 
     - name: Restart IIS
       run: |
-       powershell -Command "Import-Module RunAs; RunAs -Account 'Administrator' -Command 'iisreset /restart'"
+       iisreset /restart
 
         
         
