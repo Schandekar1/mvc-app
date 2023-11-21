@@ -1,13 +1,15 @@
-name: Deploy Prod build
+
+name: Deploy Dev build
+
 
 on:
   push:
     branches: 
-      - master
+      - Dev
 
 jobs:
   build:
-    runs-on: [self-hosted, ec2-self-hosted-runner]
+    runs-on: [self-hosted, local-runner]
     env:
         ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
@@ -86,7 +88,7 @@ jobs:
 
     - name: Copy Build Directory published directory
       run: |
-        xcopy "C:\runner\_work\mvc-app\_build" "C:\runner\published" /S /E /H /Y /D /Z /I
+        xcopy "C:\runner\actions-runner-win-x64-2.311.0\_work\mvc-app\_build" "C:\runner\published" /S /E /H /Y /D /Z /I
       shell: cmd
 
     #- name: Install RunAs module for running IIS reset 
