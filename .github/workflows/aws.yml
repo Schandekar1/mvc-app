@@ -44,6 +44,8 @@ jobs:
               $webConfigContent = $webConfigContent -replace [regex]::Escape($token), $value
           }
 
+          $webConfigContent = $webConfigContent -replace [regex]::Escape("__FROMGITSECRET_STRING__"), $env:FROMGITSECRET_STRING
+
           # Save the modified content back to the web.config file
           $webConfigContent | Set-Content $webConfigPath -Force
 
