@@ -86,7 +86,11 @@ jobs:
             Copy-Item -Path "C:\runner\published\*" -Destination $backupDirectory -Recurse
         }
 
-
+  deploy:
+    needs: build
+    if: success()
+    runs-on: [self-hosted, local-runner]
+    steps:
     - name: Copy Build Directory published directory
       run: |
         xcopy "C:\runner\actions-runner-win-x64-2.311.0\_work\mvc-app\_build" "C:\runner\published" /S /E /H /Y /D /Z /I
@@ -95,9 +99,9 @@ jobs:
     #- name: Install RunAs module for running IIS reset 
     #  run: Install-Module RunAs
 
-    - name: Restart IIS
-      run: |
-       iisreset /restart
+    # - name: Restart IIS
+    #   run: |
+    #    iisreset /restart
 
         
         
